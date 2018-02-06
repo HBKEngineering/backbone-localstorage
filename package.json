@@ -1,6 +1,6 @@
 {
   "name": "@hbkapps/backbone-localstorage",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Backbone localStorage",
   "main": "backbone-localstorage.js",
   "repository": {
@@ -8,7 +8,7 @@
     "url": "https://github.com/HBKEngineering/backbone-localstorage.git"
   },
   "scripts": {
-      "test": "grunt test"
+    "test": "grunt test"
   },
   "keywords": [
     "backbone",
@@ -16,7 +16,10 @@
     "storage",
     "cache"
   ],
-  "author": ["R. Moorman <rob@moori.nl>", "HBK Engineering, LLC"],
+  "author": [
+    "R. Moorman <rob@moori.nl>",
+    "HBK Engineering, LLC"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/moorinteractive/backbone-localstorage/issues"
