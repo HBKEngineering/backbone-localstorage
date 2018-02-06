@@ -66,7 +66,7 @@
             // Retrieve timestamp from localStorage
             var timestamp = LocalStorage._getData(id+':timestamp');
             
-            if (tyepof id !== 'undefined' && id !== null){
+            if (typeof id !== 'undefined' && id !== null){
                 var data = LocalStorage._getData(id);
                 
                 if (data === null || data === undefined || options.forceRefresh || (typeof timestamp !== 'undefined' && model.localStorage.maxRefresh && (((new Date().getTime()) - timestamp) > model.localStorage.maxRefresh))){
