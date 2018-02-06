@@ -162,7 +162,7 @@
     
     // Override Backbone.sync method when localStorage is supported.
     if (LocalStorage.isSupported()){
-        root.Backbone.sync = LocalStorage.sync;
+        Backbone.sync = LocalStorage.sync;
     }
     
     return LocalStorage;
