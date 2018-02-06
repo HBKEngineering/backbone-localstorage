@@ -1,23 +1,30 @@
-(function(root, Backbone){
-    
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['backbone', 'underscore'], factory);
+    } else {
+        // Browser globals
+        root.BackboneLocalStorage = factory(root.Backbone, root._);
+    }
+}(typeof self !== 'undefined' ? self : this, function (Backbone, _) {
     var prefix = 'unknown';
     var version = '';
     
     // Save the previous value of the `Backbone.sync` method, so that it can be called later on.
-    var previousSync = root.Backbone.sync;
+    var previousSync = Backbone.sync;
     
     // Save a reference to the global Backbone object
-    var LocalStorage = root.Backbone.LocalStorage = {};
+    var LocalStorage = Backbone.LocalStorage = {};
     
     // Current version of the library. Keep in sync with `package.json` and `bower.json`.
-    LocalStorage.VERSION = '0.3.1';
+    LocalStorage.VERSION = '0.4.0';
     
     /**
      * @param {string}
      * @param {object}
     */
     LocalStorage._setData = function(id, value){
-        root.localStorage.setItem(prefix+':'+id, JSON.stringify(value));
+        window.localStorage.setItem(prefix+':'+id, JSON.stringify(value));
     };
     
     /**
@@ -25,7 +32,7 @@
      * @return {object}
      */
     LocalStorage._getData = function(id){
-        var data = root.localStorage.getItem(prefix+':'+id);
+        var data = window.localStorage.getItem(prefix+':'+id);
         
         return typeof data === 'string' ? JSON.parse(data) : data;
     };
@@ -35,14 +42,14 @@
      */
     LocalStorage._clear = function(ignorePrefixCondition){
         if (!ignorePrefixCondition){
-            for(var prop in root.localStorage) {
+            for(var prop in window.localStorage) {
                 if(prop.indexOf(prefix) === 0) {
-                    root.localStorage.removeItem(prop);
+                    window.localStorage.removeItem(prop);
                 }
             }
         }
         else {
-            root.localStorage.clear();
+            window.localStorage.clear();
         }
     };
     
@@ -52,17 +59,17 @@
      * @param {object}
      */
     LocalStorage.sync = function(method, model, options){
-        if (method === 'read' && ((typeof this.localStorage === 'object') || (this.localStorage !== undefined && this.localStorage !== null && this.localStorage.toString().toLowerCase() === 'true'))){
+        if (method === 'read' && ((typeof model.localStorage === 'object') || (typeof model.localStorage !== undefined && model.localStorage !== null && model.localStorage.toString().toLowerCase() === 'true'))){
             // Retrieve unique id under which the data will be stored, if no id found use the id of the model
             var id = _.result(model, 'url');
             
             // Retrieve timestamp from localStorage
             var timestamp = LocalStorage._getData(id+':timestamp');
             
-            if (id !== undefined && id !== null){
+            if (tyepof id !== 'undefined' && id !== null){
                 var data = LocalStorage._getData(id);
                 
-                if (data === null || data === undefined || options.forceRefresh || (timestamp !== undefined && model.localStorage.maxRefresh && (((new Date().getTime()) - timestamp) > model.localStorage.maxRefresh))){
+                if (data === null || data === undefined || options.forceRefresh || (typeof timestamp !== 'undefined' && model.localStorage.maxRefresh && (((new Date().getTime()) - timestamp) > model.localStorage.maxRefresh))){
                     var success = options.success;
                     
                     options.success = function(response, status, xhr){
@@ -139,11 +146,11 @@
      */
     LocalStorage.isSupported = function(){
         try { 
-            var supported = root.localStorage !== undefined;
+            var supported = window.localStorage !== undefined;
             
             if (supported){
-                localStorage.setItem('storage', '');
-                localStorage.removeItem('storage');
+                window.localStorage.setItem('storage', '');
+                window.localStorage.removeItem('storage');
             }
             
             return supported;
@@ -158,4 +165,5 @@
         root.Backbone.sync = LocalStorage.sync;
     }
     
-}).call(this, window, Backbone);
+    return LocalStorage;
+}));
