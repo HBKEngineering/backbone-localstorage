@@ -17,7 +17,7 @@
     var LocalStorage = Backbone.LocalStorage = {};
     
     // Current version of the library. Keep in sync with `package.json` and `bower.json`.
-    LocalStorage.VERSION = '0.4.0';
+    LocalStorage.VERSION = '0.4.1';
     
     /**
      * @param {string}
